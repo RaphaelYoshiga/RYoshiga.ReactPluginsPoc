@@ -9,12 +9,16 @@ function App() {
   const store = RootStore.create();
   return (
     <div>
-      ToDoList:
-      <TodoList store={store}></TodoList>
+      <header className="header">
+        <div className="container">
+          <h2>Todo list demo - mobx-state-tree</h2>
+        </div>
+      </header>
+      <div className="container">         
+        <TodoList store={store}></TodoList>
+      </div>
     </div>
-    // <div className="App">
 
-    // </div>
   );
 }
 

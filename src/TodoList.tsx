@@ -4,7 +4,6 @@ import { observer } from "mobx-react";
 import { TodoListAdd } from "./TodoListAdd";
 import { onSnapshot, applySnapshot } from "mobx-state-tree";
 
-
 interface Props {
   store: any;
 }
@@ -19,7 +18,7 @@ export default class TodoList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { snapshots: [], currentFrame: -1}
+    this.state = { snapshots: [], currentFrame: -1 }
 
     onSnapshot(this.props.store, snapshot => {
       if (this.state.currentFrame === this.state.snapshots.length - 1) {
@@ -35,23 +34,28 @@ export default class TodoList extends React.Component<Props, State> {
   render() {
     return (<div>
       <TodoListAdd store={this.props.store}></TodoListAdd>
-      <div>
-        {this.props.store.getTodosWhereDoneIs(false).map((todo: any) => (
-          <TodoView todo={todo} />
-        ))}
+      <h1>To do list:</h1>
+      <div className="row">
+        <div className="col-6">
+          {this.props.store.getTodosWhereDoneIs(false).map((todo: any) => (
+            <TodoView todo={todo} />
+          ))}
+        </div>
       </div>
-      <button className="btn btn-warning" onClick={() => this.undo()}>Undo</button>
+      <button className="btn btn-warning" id="undo" onClick={() => this.undo()}>Undo</button>
     </div>);
   }
 
   undo() {
-    if (this.state.currentFrame === 0) {
+    if (this.state.currentFrame <= 0) {
+      this.setState({ currentFrame: -1, snapshots: [] }, (() => applySnapshot(this.props.store, {})));
       return;
     }
 
     const frameToRollback = this.state.currentFrame - 1;
     const rollback = this.state.snapshots[frameToRollback];
-    this.setState({ currentFrame: frameToRollback }, (()=> applySnapshot(this.props.store,rollback )));
+    this.setState({ currentFrame: frameToRollback },
+      (() => applySnapshot(this.props.store, rollback)));
   }
 }
 
@@ -63,10 +67,10 @@ interface TodoProps {
 class TodoView extends React.Component<TodoProps> {
   render() {
     return (
-      <li>
-        {this.props.todo.name} - Completed  {this.props.todo.done ? "True" : "False"} -
-        <button className="btn btn-primary" onClick={() => toggle(this.props.todo)}>Done!</button>
-      </li>
+      <div className="todo-item">
+        {this.props.todo.name}
+        <button className="btn btn-primary right" onClick={() => toggle(this.props.todo)}>Done!</button>
+      </div>
     );
     function toggle(todo: any) {
       todo.toggle();

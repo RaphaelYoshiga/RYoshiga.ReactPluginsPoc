@@ -28,10 +28,9 @@ export class TodoListAdd extends React.Component<Props, State> {
   
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className="form form-inline" onSubmit={this.handleSubmit}>
         <label>
-          Todo:
-          <input type="text" required className="form-control" value={this.state.value} onChange={this.handleChange} />
+          <input type="text" placeholder="to do" required className="form-control" value={this.state.value} onChange={this.handleChange} />
         </label>
         <input type="submit" className="btn btn-primary" value="Add" />
       </form>
