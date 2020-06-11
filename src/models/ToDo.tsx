@@ -1,4 +1,5 @@
 import { types, getSnapshot } from "mobx-state-tree"
+import {values} from "mobx";
 
 export const Todo = types
     .model({
@@ -21,11 +22,21 @@ export const User = types.model({
 
 export const RootStore = types
     .model({
-        users: types.map(User),
-        todos: types.map(Todo)
+        todos: types.array(Todo)
     })
+    .views(self => ({
+        get pendingCount() {
+            return values(self.todos).filter(todo => !todo.done).length
+        },
+        get completedCount() {
+            return values(self.todos).filter(todo => todo.done).length
+        },
+        getTodosWhereDoneIs(done: Boolean) {
+            return values(self.todos).filter(todo => todo.done === done)
+        }
+    }))
     .actions(self => ({
         addTodo(id: string, name: string) {
-            self.todos.set(id, Todo.create({ name }))
+            self.todos.push(Todo.create({ name }))
         }
     }))
