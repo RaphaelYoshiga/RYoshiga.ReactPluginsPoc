@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.css';
-import { User, Todo, RootStore } from './models/Todo'
+import { RootStore } from './models/Todo'
 import TodoList from './TodoList';
-import { getSnapshot } from "mobx-state-tree"
 import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
