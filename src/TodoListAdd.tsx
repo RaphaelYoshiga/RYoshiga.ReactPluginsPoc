@@ -1,5 +1,5 @@
 import React from "react";
-
+import './TodoListAdd.css'
 interface State{
   value: string
 }
@@ -24,13 +24,14 @@ export class TodoListAdd extends React.Component<Props, State> {
   handleSubmit(event: any) {
     this.props.store.addTodo("1", this.state.value);
     event.preventDefault();
+    this.setState({value: ""})
   }
   
   render() {
     return (
       <form className="form form-inline" onSubmit={this.handleSubmit}>
         <label>
-          <input type="text" placeholder="to do" required className="form-control" value={this.state.value} onChange={this.handleChange} />
+          <input type="text" placeholder="to do" required className="form-control todo-name" value={this.state.value} onChange={this.handleChange} />
         </label>
         <input type="submit" className="btn btn-primary" value="Add" />
       </form>
